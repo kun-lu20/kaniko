@@ -52,9 +52,9 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
         push: true
         tags: |
-          kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}-slim
-          kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}-slim
-          kunlu20/kaniko-project/executor:slim
+          docker.io/kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}-slim
+          docker.io/kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}-slim
+          docker.io/kunlu20/kaniko-project/executor:slim
 
     - uses: docker/build-push-action@v2
       with:
@@ -63,9 +63,9 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
         push: true
         tags: |
-          kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}
-          kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}
-          kunlu20/kaniko-project/executor:latest
+          docker.io/kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}
+          docker.io/kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}
+          docker.io/kunlu20/kaniko-project/executor:latest
     
     - name: Sign images 
       uses: sigstore/cosign-installer@main
@@ -75,13 +75,13 @@ jobs:
     # Use cosign to sign the images
     - run: |
         export KMS_VAL=gcpkms://projects/kaniko-project/locations/global/keyRings/cosign/cryptoKeys/cosign
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}-slim  
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}-slim 
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/executor:slim  
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}-slim  
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}-slim 
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/executor:slim  
 
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/executor:latest  
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/executor:latest  
 
   build-debug:
     env:
@@ -129,9 +129,9 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
         push: true
         tags: |
-          kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}-debug
-          kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}-debug
-          kunlu20/kaniko-project/executor:debug
+          docker.io/kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}-debug
+          docker.io/kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}-debug
+          docker.io/kunlu20/kaniko-project/executor:debug
 
     - name: Sign images 
       uses: sigstore/cosign-installer@main
@@ -141,9 +141,9 @@ jobs:
       # Use cosign to sign the images
     - run: |
         export KMS_VAL=gcpkms://projects/kaniko-project/locations/global/keyRings/cosign/cryptoKeys/cosign
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}-debug
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}-debug
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/executor:debug
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/executor:${{ env.GITHUB_SHA }}-debug
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/executor:${{ steps.vars.outputs.tag }}-debug
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/executor:debug
 
   build-warmer:
     env:
@@ -191,9 +191,9 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
         push: true
         tags: |
-          kunlu20/kaniko-project/warmer:${{ env.GITHUB_SHA }}
-          kunlu20/kaniko-project/warmer:${{ steps.vars.outputs.tag }}
-          kunlu20/kaniko-project/warmer:latest
+          docker.io/kunlu20/kaniko-project/warmer:${{ env.GITHUB_SHA }}
+          docker.io/kunlu20/kaniko-project/warmer:${{ steps.vars.outputs.tag }}
+          docker.io/kunlu20/kaniko-project/warmer:latest
 
     - name: Sign images 
       uses: sigstore/cosign-installer@main
@@ -203,6 +203,6 @@ jobs:
       # Use cosign to sign the images
     - run: |
         export KMS_VAL=gcpkms://projects/kaniko-project/locations/global/keyRings/cosign/cryptoKeys/cosign
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/warmer:${{ env.GITHUB_SHA }}
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/warmer:${{ steps.vars.outputs.tag }}
-        cosign sign -kms $KMS_VAL kunlu20/kaniko-project/warmer:latest
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/warmer:${{ env.GITHUB_SHA }}
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/warmer:${{ steps.vars.outputs.tag }}
+        cosign sign -kms $KMS_VAL docker.io/kunlu20/kaniko-project/warmer:latest
