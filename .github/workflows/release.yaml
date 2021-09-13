@@ -20,11 +20,7 @@ jobs:
       id: vars
       run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\//}
     
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v1
-      with:
-        platforms: ${{ env.PLATFORMS }}
-        image: multiarch/qemu-user-static
+    - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
     - name: Cache Docker layers
       uses: actions/cache@v2
@@ -98,11 +94,7 @@ jobs:
       id: vars
       run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\//}
 
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v1
-      with:
-        platforms: ${{ env.PLATFORMS }}
-        image: multiarch/qemu-user-static
+    - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
     - name: Cache Docker layers
       uses: actions/cache@v2
@@ -161,11 +153,7 @@ jobs:
       id: vars
       run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\//}
 
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v1
-      with:
-        platforms: ${{ env.PLATFORMS }}
-        image: multiarch/qemu-user-static
+    - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
     - name: Cache Docker layers
       uses: actions/cache@v2
