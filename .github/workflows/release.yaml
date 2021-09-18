@@ -203,4 +203,3 @@ jobs:
       uses: sigstore/cosign-installer@main
       with:
         cosign-release: 'v0.2.0'
-
