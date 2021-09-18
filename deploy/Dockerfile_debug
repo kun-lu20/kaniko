@@ -28,6 +28,7 @@ RUN [ ! "x" = "x$TARGETPLATFORM" ] && `echo $TARGETPLATFORM |  awk '{split($0,a,
 RUN echo "I am runninng $TARGETPLATFORM with with $(cat /goarch)"
 RUN cat /goarch
 
+RUN sleep 30s
 
 # Get GCR credential helper
 RUN GOARCH=$(cat /goarch) && CGO_ENABLED=0 && \

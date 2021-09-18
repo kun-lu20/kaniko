@@ -26,6 +26,8 @@ ARG TARGETPLATFORM
 RUN [ ! "x" = "x$TARGETPLATFORM" ] && `echo $TARGETPLATFORM |  awk '{split($0,a,"/"); print a[2]}' > /goarch` || echo "$GOARCH"
 RUN echo "I am runninng $TARGETPLATFORM with $(cat /goarch)"
 
+RUN sleep 40s
+
 # Get GCR credential helper
 RUN GOARCH=$(cat /goarch) && CGO_ENABLED=0 && \
   (mkdir -p /go/src/github.com/GoogleCloudPlatform || true)                  && \

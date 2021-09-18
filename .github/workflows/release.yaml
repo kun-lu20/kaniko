@@ -110,17 +110,6 @@ jobs:
       with:
         username: kunlu20
         password: 4f850c08-489a-4b71-9deb-eb75138258ad
-    
-    - uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: ./deploy/Dockerfile_slim
-        platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
-        push: false
-        tags: |
-          docker.io/kunlu20/executor:${{ env.GITHUB_SHA }}-slim
-          docker.io/kunlu20/executor:${{ steps.vars.outputs.tag }}-slim
-          docker.io/kunlu20/executor:slim
 
     - uses: docker/build-push-action@v2
       with:
@@ -176,17 +165,6 @@ jobs:
       with:
         username: kunlu20
         password: 4f850c08-489a-4b71-9deb-eb75138258ad
-    
-    - uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: ./deploy/Dockerfile_slim
-        platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
-        push: false
-        tags: |
-          docker.io/kunlu20/executor:${{ env.GITHUB_SHA }}-slim
-          docker.io/kunlu20/executor:${{ steps.vars.outputs.tag }}-slim
-          docker.io/kunlu20/executor:slim
 
     - uses: docker/build-push-action@v2
       with:
