@@ -24,6 +24,7 @@ jobs:
       uses: docker/setup-qemu-action@v1
       with:
         platforms: ${{ env.PLATFORMS }}
+        image: tonistiigi/binfmt:qemu-v6.1.0
 
     - name: Cache Docker layers
       uses: actions/cache@v2
@@ -86,6 +87,7 @@ jobs:
       uses: docker/setup-qemu-action@v1
       with:
         platforms: ${{ env.PLATFORMS }}
+        image: tonistiigi/binfmt:qemu-v6.1.0
 
     - name: Cache Docker layers
       uses: actions/cache@v2
