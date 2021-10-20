@@ -39,7 +39,12 @@ jobs:
       uses: docker/setup-buildx-action@v1
       with:
         version: latest
-       
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: kunlu20
+        password: 4f850c08-489a-4b71-9deb-eb75138258ad
 
     - uses: docker/build-push-action@v2
       with:
@@ -47,7 +52,7 @@ jobs:
         file: ./deploy/Dockerfile_slim
         platforms: linux/amd64,linux/arm64,linux/s390x,linux/ppc64le
         tags: |
-          gcr.io/kaniko-project/executor:${{ env.GITHUB_SHA }}-slim
+          docker.io/kunlu20/executor:${{ env.GITHUB_SHA }}-slim
 
   build-debug:
     env:
@@ -80,7 +85,12 @@ jobs:
       uses: docker/setup-buildx-action@v1
       with:
         version: latest
-       
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: kunlu20
+        password: 4f850c08-489a-4b71-9deb-eb75138258ad
 
     - uses: docker/build-push-action@v2
       with:
@@ -88,13 +98,13 @@ jobs:
         file:  ./deploy/Dockerfile_debug
         platforms: linux/amd64,linux/arm64
         tags: |
-          gcr.io/kaniko-project/executor:${{ env.GITHUB_SHA }}-debug
+          docker.io/kunlu20/executor:${{ env.GITHUB_SHA }}-debug
 
   build-warmer:
     env:
       GITHUB_SHA: ${{ github.sha }}
       GITHUB_REF: ${{ github.ref }}
-      PLATFORMS: "linux/amd64,linux/arm64"
+      PLATFORMS: "linux/amd64,linux/arm64,linux/s390x"
     runs-on: ubuntu-latest
     steps:
     - name: Clone source code
@@ -121,20 +131,26 @@ jobs:
       uses: docker/setup-buildx-action@v1
       with:
         version: latest
-       
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: kunlu20
+        password: 4f850c08-489a-4b71-9deb-eb75138258ad
+
     - uses: docker/build-push-action@v2
       with:
         context: .
         file: ./deploy/Dockerfile_warmer
-        platforms: linux/amd64,linux/arm64
+        platforms: linux/amd64,linux/arm64,linux/s390x
         tags: |
-          gcr.io/kaniko-project/warmer:${{ env.GITHUB_SHA }}
+          docker.io/kunlu20/warmer:${{ env.GITHUB_SHA }}
 
   build-executor:
     env:
       GITHUB_SHA: ${{ github.sha }}
       GITHUB_REF: ${{ github.ref }}
-      PLATFORMS: "linux/amd64,linux/arm64"
+      PLATFORMS: "linux/amd64,linux/arm64,linux/s390x"
     runs-on: ubuntu-latest
     steps:
     - name: Clone source code
@@ -161,11 +177,17 @@ jobs:
       uses: docker/setup-buildx-action@v1
       with:
         version: latest
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: kunlu20
+        password: 4f850c08-489a-4b71-9deb-eb75138258ad
 
     - uses: docker/build-push-action@v2
       with:
         context: .
         file: ./deploy/Dockerfile
-        platforms: linux/amd64,linux/arm64
+        platforms: linux/amd64,linux/arm64,linux/s390x
         tags: |
-          gcr.io/kaniko-project/executor:${{ env.GITHUB_SHA }}
+          docker.io/kunlu20/executor:${{ env.GITHUB_SHA }}
