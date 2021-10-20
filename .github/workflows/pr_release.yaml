@@ -1,17 +1,17 @@
-name: Build images on push to master
+name: Build images on pull requests
 
-on:
-  push:
-    tags:
-    - 'v[0-9]+.[0-9]+.[0-9]+*'
+on: [pull_request]
+
+concurrency:
+  group: release-images-${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-executor:
+  build-executor-slim:
     env:
       GITHUB_SHA: ${{ github.sha }}
       GITHUB_REF: ${{ github.ref }}
-      PLATFORMS: "linux/amd64,linux/arm64,linux/s390x"
-
+      PLATFORMS: "linux/amd64,linux/arm64,linux/s390x,linux/ppc64le"
     runs-on: ubuntu-latest
     steps:
     - name: Clone source code
@@ -39,7 +39,7 @@ jobs:
       uses: docker/setup-buildx-action@v1
       with:
         version: latest
-
+    
     - name: Login to DockerHub
       uses: docker/login-action@v1 
       with:
@@ -49,18 +49,10 @@ jobs:
     - uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./deploy/Dockerfile
-        platforms: linux/amd64,linux/arm64,linux/s390x
-        push: true
+        file: ./deploy/Dockerfile_slim
+        platforms: linux/amd64,linux/arm64,linux/s390x,linux/ppc64le
         tags: |
-          docker.io/kunlu20/executor:${{ env.GITHUB_SHA }}
-          docker.io/kunlu20/executor:${{ steps.vars.outputs.tag }}
-          docker.io/kunlu20/executor:latest
-    
-    - name: Sign images 
-      uses: sigstore/cosign-installer@main
-      with:
-        cosign-release: 'v0.2.0'
+          docker.io/kunlu20/executor:${{ env.GITHUB_SHA }}-slim
 
   build-debug:
     env:
@@ -88,13 +80,12 @@ jobs:
         key: ${{ runner.os }}-buildx-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-buildx-
-
     - name: Set up Docker Buildx
       id: buildx
       uses: docker/setup-buildx-action@v1
       with:
         version: latest
-
+    
     - name: Login to DockerHub
       uses: docker/login-action@v1 
       with:
@@ -106,16 +97,8 @@ jobs:
         context: .
         file:  ./deploy/Dockerfile_debug
         platforms: linux/amd64,linux/arm64
-        push: true
         tags: |
           docker.io/kunlu20/executor:${{ env.GITHUB_SHA }}-debug
-          docker.io/kunlu20/executor:${{ steps.vars.outputs.tag }}-debug
-          docker.io/kunlu20/executor:debug
-
-    - name: Sign images 
-      uses: sigstore/cosign-installer@main
-      with:
-        cosign-release: 'v0.2.0'
 
   build-warmer:
     env:
@@ -143,13 +126,12 @@ jobs:
         key: ${{ runner.os }}-buildx-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-buildx-
-
     - name: Set up Docker Buildx
       id: buildx
       uses: docker/setup-buildx-action@v1
       with:
         version: latest
-
+    
     - name: Login to DockerHub
       uses: docker/login-action@v1 
       with:
@@ -161,24 +143,14 @@ jobs:
         context: .
         file: ./deploy/Dockerfile_warmer
         platforms: linux/amd64,linux/arm64,linux/s390x
-        push: true
         tags: |
           docker.io/kunlu20/warmer:${{ env.GITHUB_SHA }}
-          docker.io/kunlu20/warmer:${{ steps.vars.outputs.tag }}
-          docker.io/kunlu20/warmer:latest
 
-    - name: Sign images 
-      uses: sigstore/cosign-installer@main
-      with:
-        cosign-release: 'v0.2.0'
-
-
-  build-slim:
+  build-executor:
     env:
       GITHUB_SHA: ${{ github.sha }}
       GITHUB_REF: ${{ github.ref }}
-      PLATFORMS: "linux/amd64,linux/arm64,linux/s390x,linux/ppc64le"
-
+      PLATFORMS: "linux/amd64,linux/arm64,linux/s390x"
     runs-on: ubuntu-latest
     steps:
     - name: Clone source code
@@ -200,13 +172,12 @@ jobs:
         key: ${{ runner.os }}-buildx-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-buildx-
-
     - name: Set up Docker Buildx
       id: buildx
       uses: docker/setup-buildx-action@v1
       with:
         version: latest
-
+    
     - name: Login to DockerHub
       uses: docker/login-action@v1 
       with:
@@ -216,10 +187,7 @@ jobs:
     - uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./deploy/Dockerfile_slim
-        platforms: linux/amd64,linux/arm64,linux/s390x,linux/ppc64le
-        push: true
+        file: ./deploy/Dockerfile
+        platforms: linux/amd64,linux/arm64,linux/s390x
         tags: |
-          docker.io/kunlu20/executor:${{ env.GITHUB_SHA }}-slim
-          docker.io/kunlu20/executor:${{ steps.vars.outputs.tag }}-slim
-          docker.io/kunlu20/executor:slim
+          docker.io/kunlu20/executor:${{ env.GITHUB_SHA }}

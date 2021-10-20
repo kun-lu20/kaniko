@@ -32,8 +32,10 @@ RUN GOARCH=$(cat /goarch) && CGO_ENABLED=0 && \
   cd /go/src/github.com/GoogleCloudPlatform                                  && \
   git clone https://github.com/GoogleCloudPlatform/docker-credential-gcr.git && \
   cd /go/src/github.com/GoogleCloudPlatform/docker-credential-gcr            && \
-  make deps OUT_DIR=/usr/local/bin                                           && \
+  git checkout 4cdd60d0f2d8a69bc70933f4d7718f9c4e956ff8                      && \
+  go get -u -t ./...                                                         && \
   go build -ldflags "-linkmode external -extldflags -static" -i -o /usr/local/bin/docker-credential-gcr main.go
+
 
 # Get Amazon ECR credential helper
 RUN GOARCH=$(cat /goarch) && go get -u github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cli/docker-credential-ecr-login && \
@@ -50,7 +52,7 @@ RUN GOARCH=$(cat /goarch) && (mkdir -p /go/src/github.com/chrismellard || true) 
 RUN mkdir -p /kaniko/.docker
 
 COPY . .
-RUN make GOARCH=$(cat /goarch.txt)
+RUN make GOARCH=$(cat /goarch)
 
 # Generate latest ca-certificates
 
@@ -76,6 +78,5 @@ ENV SSL_CERT_DIR=/kaniko/ssl/certs
 ENV DOCKER_CONFIG /kaniko/.docker/
 ENV DOCKER_CREDENTIAL_GCR_CONFIG /kaniko/.config/gcloud/docker_credential_gcr_config.json
 WORKDIR /workspace
-RUN ["docker-credential-gcr", "config", "--token-source=env"]
 
 ENTRYPOINT ["/kaniko/executor"]
